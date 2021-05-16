@@ -23,7 +23,8 @@
   "homepage": "https://github.com/erkemp3/book-library#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "mysql2": "^2.2.5"
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.6.2"
   },
   "devDependencies": {
     "chai": "^4.3.4",
