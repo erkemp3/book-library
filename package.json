@@ -1,0 +1,35 @@
+{
+  "name": "book-library",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "node scripts/create-database.js",
+    "start": "nodemon -r dotenv/config index.js",
+    "pretest": "node scripts/create-database.js test",
+    "test": "mocha tests/**/*.test.js",
+    "posttest": "node scripts/drop-database.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erkemp3/book-library.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/erkemp3/book-library/issues"
+  },
+  "homepage": "https://github.com/erkemp3/book-library#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql2": "^2.2.5"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "dotenv": "^9.0.2",
+    "mocha": "^8.4.0",
+    "nodemon": "^2.0.7",
+    "supertest": "^6.1.3"
+  }
+}
