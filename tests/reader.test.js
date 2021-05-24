@@ -18,6 +18,14 @@ describe("/readers", () => {
           email: "future_ms_darcy@gmail.com",
         });
 
+        const newReaderRecord = await Reader.findByPk(response.body.id, {
+          raw: true,
+        });
+
+        expect(response.body.name).to.equal("Elizabeth Bennet");
+        expect(newReaderRecord.name).to.equal("Elizabeth Bennet");
+        expect(newReaderRecord.email).to.equal("future_ms_darcy@gmail.com");
+
         expect(response.status).to.equal(201);
       });
     });
