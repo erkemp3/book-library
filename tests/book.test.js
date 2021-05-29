@@ -38,6 +38,18 @@ describe("/books", () => {
 
         expect(response.status).to.equal(201);
       });
+      it("returns a 400 error if field is null", async () => {
+        const response = await request(app).post("/readers").send({
+          title: "Working Hard Hardly Working",
+          genre: "Self Help",
+          ISBN: "9781786332851",
+        });
+
+        expect(response.status).to.equal(400);
+        expect(response.body.error).to.equal(
+          "Please ensure all fields are completed."
+        );
+      });
     });
   });
 

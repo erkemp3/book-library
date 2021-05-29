@@ -20,49 +20,46 @@ describe("/readers", () => {
     describe("POST /readers", () => {
       it("creates a new reader in the database", async () => {
         const response = await request(app).post("/readers").send({
-          name: "Emmett Brown",
-          email: "outatime@aol.com",
-          password: "55555",
+          name: "Ellie Kemp",
+          email: "ellie@ellie.com",
+          password: "12345678",
         });
+
         const readerRecord = await Reader.findByPk(response.body.id, {
           raw: true,
         });
 
-        expect(response.body.name).to.equal("Emmett Brown");
-        expect(readerRecord.name).to.equal("Emmett Brown");
-        expect(readerRecord.email).to.equal("outatime@aol.com");
-        expect(readerRecord.password).to.equal("55555");
+        expect(response.body.name).to.equal("Ellie Kemp");
+        expect(readerRecord.name).to.equal("Ellie Kemp");
+        expect(readerRecord.email).to.equal("ellie@ellie.com");
+        expect(readerRecord.password).to.equal("12345678");
 
         expect(response.status).to.equal(201);
       });
 
-      it("validates the password length", async () => {
-        const response = await request(app).post("/readers").send({
-          name: "Emmett Brown",
-          email: "outatime@aol.com",
-          password: "abc",
-        });
-
-        expect(response.status).to.equal(400);
-      });
-
-      it("all fields required", async () => {
+      it("returns a 400 error if field is null", async () => {
         const response = await request(app).post("/readers").send({
           name: "Emmett Brown",
           email: "outatime@aol.com",
         });
 
         expect(response.status).to.equal(400);
+        expect(response.body.error).to.equal(
+          "Please ensure all fields are completed."
+        );
       });
 
-      it("removes the password from the response", async () => {
+      it("returns a 422 error if password is not between 8 and 16", async () => {
         const response = await request(app).post("/readers").send({
           name: "Emmett Brown",
           email: "outatime@aol.com",
-          password: "1885195519852015",
+          password: "123",
         });
 
-        expect(response.body.password).to.equal(undefined);
+        expect(response.status).to.equal(422);
+        expect(response.body.error).to.equal(
+          "Password must be between 8 and 16 characters in length."
+        );
       });
     });
   });
@@ -98,6 +95,21 @@ describe("/readers", () => {
       await Reader.destroy({ truncate: { cascade: true } });
     });
 
+    describe("POST /readers", () => {
+      it("returns a 409 error if email has already been used", async () => {
+        const response = await request(app).post("/readers").send({
+          name: "Emmett Brown",
+          email: "outatime@aol.com",
+          password: "12345678",
+        });
+
+        expect(response.status).to.equal(409);
+        expect(response.body.error).to.equal(
+          `User with email outatime@aol.com already exists.`
+        );
+      });
+    });
+
     describe("GET /readers", () => {
       it("gets all readers records", async () => {
         const response = await request(app).get("/readers").send();
@@ -110,13 +122,7 @@ describe("/readers", () => {
 
           expect(reader.name).to.equal(expected.name);
           expect(reader.email).to.equal(expected.email);
-        });
-
-        it("removes the password from the response", async () => {
-          const response = await request(app).get("/readers").send();
-          response.body.forEach((reader) => {
-            expect(reader.password).to.equal(undefined);
-          });
+          expect(reader.password).to.equal(undefined);
         });
       });
     });
@@ -129,6 +135,7 @@ describe("/readers", () => {
         expect(response.status).to.equal(200);
         expect(response.body.name).to.equal(reader.name);
         expect(response.body.email).to.equal(reader.email);
+        expect(response.body.password).to.equal(undefined);
       });
 
       it("returns a 404 if the reader does not exist", async () => {
@@ -136,12 +143,6 @@ describe("/readers", () => {
 
         expect(response.status).to.equal(404);
         expect(response.body.error).to.equal("The reader could not be found.");
-      });
-
-      it("removes the password from the response", async () => {
-        const reader = readers[0];
-        const response = await request(app).get(`/readers/${reader.id}`);
-        expect(response.body.password).to.equal(undefined);
       });
     });
 
