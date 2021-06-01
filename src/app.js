@@ -6,7 +6,8 @@ const bookRouter = require("./routes/book");
 
 app.use(express.json());
 
-app.use(readerRouter);
-app.use(bookRouter);
+app.use("/readers", readerRouter);
+
+app.use("/books", bookRouter);
 
 module.exports = app;

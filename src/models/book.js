@@ -12,7 +12,6 @@ module.exports = (connection, DataTypes) => {
     },
     author: {
       type: DataTypes.STRING,
-      allowNull: false,
       validate: {
         notEmpty: {
           args: true,

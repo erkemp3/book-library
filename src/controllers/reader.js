@@ -1,6 +1,7 @@
 const { Reader } = require("../models");
+const helper = require("./helper");
 
-exports.create = async (req, res) => {
+const create = async (req, res) => {
   const checkPassword = req.body.password;
   const checkEmail = req.body.email;
   const checkName = req.body.name;
@@ -22,52 +23,32 @@ exports.create = async (req, res) => {
   }
 
   if (checkPassword.length < 8 || checkPassword.length > 16) {
-    return res
-      .status(422)
-      .send({
-        error: `Password must be between 8 and 16 characters in length.`,
-      });
+    return res.status(422).send({
+      error: `Password must be between 8 and 16 characters in length.`,
+    });
   }
 
-  const newReader = await Reader.create(req.body);
-  res.status(201).json(newReader);
+  helper.create("reader", req, res);
 };
 
-exports.findAll = async (req, res) => {
-  const readers = await Reader.findAll();
-  res.status(200).json(readers);
+const findAll = async (req, res) => {
+  helper.findAll("reader", req, res);
 };
 
-exports.findById = async (req, res) => {
-  const thisReader = await Reader.findByPk(req.params.id);
-  if (!thisReader) {
-    return res.status(404).send({ error: "The reader could not be found." });
-  }
-  res.status(200).json(thisReader);
+const findById = async (req, res) => {
+  helper.findById("reader", req, res);
 };
 
-exports.update = async (req, res) => {
-  let thisReader = await Reader.findByPk(req.params.id);
-
-  if (!thisReader)
-    return res.status(404).send({ error: "The reader could not be found." });
-
-  await Reader.update(req.body, {
-    where: { id: req.params.id },
-  });
-
-  thisReader = await Reader.findByPk(req.params.id);
-  res.status(200).json(thisReader);
+const findAllBooks = async (req, res) => {
+  helper.findAllBooks("reader", req, res);
 };
 
-exports.delete = async (req, res) => {
-  const thisReader = await Reader.findByPk(req.params.id);
-  if (!thisReader) {
-    return res.status(404).send({ error: "The reader could not be found." });
-  }
-
-  await Reader.destroy({
-    where: { id: req.params.id },
-  });
-  res.status(204).json(thisReader);
+const update = async (req, res) => {
+  helper.update("reader", req, res);
 };
+
+const remove = async (req, res) => {
+  helper.remove("reader", req, res);
+};
+
+module.exports = { create, findAll, findById, findAllBooks, update, remove };

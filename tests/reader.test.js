@@ -20,8 +20,8 @@ describe("/readers", () => {
     describe("POST /readers", () => {
       it("creates a new reader in the database", async () => {
         const response = await request(app).post("/readers").send({
-          name: "Ellie Kemp",
-          email: "ellie@ellie.com",
+          name: "Dean Spooner",
+          email: "dean@dean.com",
           password: "12345678",
         });
 
@@ -29,9 +29,9 @@ describe("/readers", () => {
           raw: true,
         });
 
-        expect(response.body.name).to.equal("Ellie Kemp");
-        expect(readerRecord.name).to.equal("Ellie Kemp");
-        expect(readerRecord.email).to.equal("ellie@ellie.com");
+        expect(response.body.name).to.equal("Dean Spooner");
+        expect(readerRecord.name).to.equal("Dean Spooner");
+        expect(readerRecord.email).to.equal("dean@dean.com");
         expect(readerRecord.password).to.equal("12345678");
 
         expect(response.status).to.equal(201);
@@ -122,7 +122,7 @@ describe("/readers", () => {
 
           expect(reader.name).to.equal(expected.name);
           expect(reader.email).to.equal(expected.email);
-          expect(reader.password).to.equal(undefined);
+          expect(reader.password).to.equal(expected.password);
         });
       });
     });
@@ -135,7 +135,7 @@ describe("/readers", () => {
         expect(response.status).to.equal(200);
         expect(response.body.name).to.equal(reader.name);
         expect(response.body.email).to.equal(reader.email);
-        expect(response.body.password).to.equal(undefined);
+        expect(response.body.password).to.equal(reader.password);
       });
 
       it("returns a 404 if the reader does not exist", async () => {
