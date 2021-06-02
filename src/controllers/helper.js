@@ -1,13 +1,15 @@
-const { Book, Reader } = require("../models");
+const { Book, Reader, Author } = require("../models");
 const getModel = (model) => {
   const models = {
     reader: Reader,
     book: Book,
+    author: Author,
   };
   return models[model];
 };
 const readerError = { error: "The reader could not be found." };
 const bookError = { error: "The book could not be found." };
+const authorError = { error: "The author could not be found." };
 
 const removePassword = (obj) => {
   if (obj.hasOwnProperty("password")) {
@@ -35,6 +37,9 @@ const findById = async (model, req, res) => {
   if (!thisItem && model == "book") {
     return res.status(404).send(bookError);
   }
+  if (!thisItem && model == "author") {
+    return res.status(404).send(authorError);
+  }
   res.status(200).send(removePassword(thisItem.dataValues));
 };
 const update = async (model, req, res) => {
@@ -44,6 +49,9 @@ const update = async (model, req, res) => {
   }
   if (!thisItem && model == "book") {
     return res.status(404).send(bookError);
+  }
+  if (!thisItem && model == "author") {
+    return res.status(404).send(authorError);
   }
   await getModel(model).update(req.body, {
     where: { id: req.params.id },
@@ -58,6 +66,9 @@ const remove = async (model, req, res) => {
   }
   if (!thisItem && model == "book") {
     return res.status(404).send(bookError);
+  }
+  if (!thisItem && model == "author") {
+    return res.status(404).send(authorError);
   }
   await getModel(model).destroy({
     where: { id: req.params.id },
