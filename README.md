@@ -4,7 +4,7 @@ This project creates an app for managing a book library, using Sequelize, databa
 
 ### Install
 - Fork this repository
-- `git clone git@github.com:<your-github-username>/book-library.git`
+- `git clone git@github.com:erkemp3/book-library.git`
 - `cd book-library`
 - `npm install`
 
