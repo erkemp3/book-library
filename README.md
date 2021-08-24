@@ -2,6 +2,8 @@
 
 This project creates an app for managing a book library, using Sequelize, databases and express.js.
 
+An API was created to perform CRUD operations on a database. This will take JSON GET, POST, PATCH, PUT and DELETE requests to add, read, update or delete readers, books, authors and genres from a book library database.
+
 ### Install
 - Fork this repository
 - `git clone git@github.com:erkemp3/book-library.git`
@@ -43,6 +45,6 @@ Create a new file in the project root called `.env` and add your environment var
 
 Make sure the DBNAME in you `.env.test` has a different name.
 
-You can then fire up the API with `npm start`.# book-library
+You can then fire up the API with `npm start`
 
 ## By Ellie Kemp and Manchester Codes
